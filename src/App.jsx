@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
-const API_BASE = "https://open-data-worker.shahriyarhasan2020.workers.dev/api";
+// Backend URL comes from VITE_API_BASE (set in .env.production / hosting dashboard).
+// Empty in local dev → relative "/api", proxied by Vite to http://localhost:4000.
+const API_BASE = `${(import.meta.env.VITE_API_BASE || "").replace(/\/+$/, "").replace(/\/api$/, "")}/api`;
 
 // ── Source definitions ────────────────────────────────────────────────────────
 const COUNTRIES = [
@@ -259,7 +261,8 @@ export default function App() {
       setResults(data.results || []);
       setSearched(true);
     } catch(e) {
-      setError("Cannot reach the backend. Make sure it's running on port 4000.");
+      console.error("Search failed:", e);
+      setError(`Cannot reach the backend (${API_BASE}). ${import.meta.env.DEV ? "Make sure it's running on port 4000." : "It may be waking up — try again in a few seconds."}`);
       setResults([]);
     } finally { setLoading(false); }
   }, []);

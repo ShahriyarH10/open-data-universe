@@ -5,5 +5,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-  }
+    // Local dev: forward /api to the local backend (avoids CORS entirely)
+    proxy: {
+      '/api': 'http://localhost:4000',
+    },
+  },
 })
