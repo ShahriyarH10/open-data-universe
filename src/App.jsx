@@ -269,16 +269,9 @@ export default function App() {
 
   useEffect(() => { doSearch(dq, activeSources); }, [dq, activeSources, doSearch]);
 
-  // group results by source when >1 source
-  const grouped = useMemo(() => {
-    if (activeSources.length === 1 && activeSources[0]) return null; // flat list for single source
-    const map = {};
-    for (const r of results) {
-      if (!map[r.source]) map[r.source] = { flag: r.sourceFlag, items: [] };
-      map[r.source].items.push(r);
-    }
-    return Object.keys(map).length > 1 ? map : null;
-  }, [results, activeSources]);
+  // Results arrive ranked by relevance from the backend; show them as one ranked list
+  // (grouping by source would bury the best matches under weaker ones from other sources).
+  const grouped = null;
 
   function toggleCountry(code) {
     setSelCountries(p => p.includes(code) ? p.filter(c => c!==code) : [...p, code]);
